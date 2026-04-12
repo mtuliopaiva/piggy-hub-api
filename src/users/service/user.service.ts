@@ -10,6 +10,8 @@ import { UpdateUserDto } from '../domain/dtos/update-user.dto';
 import { AuditService } from '../../audits/service/audit.service';
 import { toAuditJson } from '../../audits/utils/convertToAuditJson';
 import { UserType } from '@prisma/client';
+import { UpdateUserProfileDto } from '../domain/dtos/update-userProfile.dto';
+import { UserEntity } from '../domain/entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -29,6 +31,16 @@ export class UserService {
 
   async findByUuid(uuid: string) {
     const user = await this.userRepository.findByUuid(uuid);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
+  async findUserProfileByUuid(uuid: string) {
+    const user = await this.userRepository.findUserProfileByUuid(uuid);
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -72,6 +84,23 @@ export class UserService {
     return updatedUser;
   }
 
+  async updateUserProfile(uuid: string, dto: UpdateUserProfileDto) {
+    const oldUser = await this.findUserProfileByUuid(uuid);
+
+    const updatedUser = await this.userRepository.updateUserProfile(uuid, dto);
+
+    await this.auditService.create({
+      actorUuid: uuid,
+      actorEmail: oldUser.email,
+      action: 'userProfile.update',
+      entity: 'UserProfile',
+      entityUuid: uuid,
+      oldData: toAuditJson(oldUser.userProfile),
+      newData: toAuditJson(updatedUser.userProfile),
+    });
+
+    return updatedUser;
+  }
   async softDelete(uuid: string, actor: { uuid: string; email: string }) {
     const oldUser = await this.findByUuid(uuid);
 

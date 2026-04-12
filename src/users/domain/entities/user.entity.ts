@@ -8,6 +8,7 @@ export class UserEntity {
   userProfile?: {
     name?: string;
     avatarUrl?: string;
+    birthDate?: Date;
   };
   createdAt: Date;
   updatedAt: Date;

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../core/database/prisma.service';
+import { PrismaService } from '../../../core/database/prisma.service';
 import { EventLogsRepository } from './eventLogs.repository';
 import { EventLogsEntity } from '../domain/entities/log.entity';
 import { CreateEventLogsData } from '../domain/types/create-eventLogs-data.type';

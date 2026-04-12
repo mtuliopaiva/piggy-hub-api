@@ -3,8 +3,9 @@ import { PrismaModule } from './core/database/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/module/auth.module';
 import { UserModule } from './users/module/user.module';
-import { EventLogsModule } from './eventLogs/module/eventLogs.module';
 import { AuditModule } from './audits/module/audit.module';
+import { EventLogsModule } from './core/eventLogs/module/eventLogs.module';
+import { CategoryModule } from './category/module/category.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuditModule } from './audits/module/audit.module';
     UserModule,
     EventLogsModule,
     AuditModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [],

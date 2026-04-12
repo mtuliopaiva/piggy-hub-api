@@ -4,6 +4,7 @@ import { UserRepository } from './user.repository';
 import { UserEntity } from '../domain/entities/user.entity';
 import { CreateUserData } from '../domain/types/create-user-data.type';
 import { UpdateUserData } from '../domain/types/update-user-data.type';
+import { UpdateUserProfileDto } from '../domain/dtos/update-userProfile.dto';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -51,6 +52,18 @@ export class PrismaUserRepository implements UserRepository {
         deletedAt: null,
       },
     });
+  }
+
+  async findUserProfileByUuid(uuid: string): Promise<UserEntity | null> {
+    return this.prisma.user.findFirst({
+      where: {
+        uuid,
+        deletedAt: null,
+      },
+      include: {
+        userProfile: true,
+      },
+    }) as Promise<UserEntity | null>;
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
@@ -164,6 +177,23 @@ export class PrismaUserRepository implements UserRepository {
       where: { uuid },
       data,
     });
+  }
+
+  async updateUserProfile(
+    uuid: string,
+    dto: UpdateUserProfileDto,
+  ): Promise<UserEntity> {
+    return this.prisma.user.update({
+      where: { uuid },
+      data: {
+        userProfile: {
+          update: dto,
+        },
+      },
+      include: {
+        userProfile: true,
+      },
+    }) as Promise<UserEntity>;
   }
 
   async findDeletedByUuid(uuid: string): Promise<UserEntity | null> {

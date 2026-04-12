@@ -24,6 +24,9 @@ import { Permission } from '../../auth/enums/permission.type';
 import { SelfOrAdminGuard } from '../../auth/guards/self-or-admin.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../../auth/types/auth-user.type';
+import { UserProfileByUuidQuery } from '../domain/queries/userProfile-by-uuid.query';
+import { UpdateUserProfileCommand } from '../domain/commands/update-userProfile.command';
+import { UpdateUserProfileDto } from '../domain/dtos/update-userProfile.dto';
 @ApiTags('Users')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -45,6 +48,16 @@ export class UserController {
     );
   }
 
+  @Get('me')
+  @Permissions(Permission.USERS_READ)
+  findUserProfileByUuid(@CurrentUser() currentUser: AuthUser) {
+    return this.queryBus.execute(
+      new UserProfileByUuidQuery({
+        currentUserUuid: currentUser.uuid,
+      }),
+    );
+  }
+
   @Get(':uuid')
   @UseGuards(SelfOrAdminGuard)
   @Permissions(Permission.USERS_READ)
@@ -56,6 +69,20 @@ export class UserController {
       new UserByUuidQuery({
         uuid,
         currentUserUuid: currentUser.uuid,
+      }),
+    );
+  }
+
+  @Patch('me/update')
+  @Permissions(Permission.USERS_UPDATE)
+  updateUserProfile(
+    @Body() dto: UpdateUserProfileDto,
+    @CurrentUser() currentUser: AuthUser,
+  ) {
+    return this.commandBus.execute(
+      new UpdateUserProfileCommand({
+        currentUserUuid: currentUser.uuid,
+        dto,
       }),
     );
   }
@@ -78,12 +105,12 @@ export class UserController {
     );
   }
 
-  @Delete(':uuid')
+  @Post(':uuid/restore')
   @UseGuards(SelfOrAdminGuard)
-  @Permissions(Permission.USERS_DELETE)
-  delete(@Param('uuid') uuid: string, @CurrentUser() currentUser: AuthUser) {
+  @Permissions(Permission.USERS_RESTORE)
+  restore(@Param('uuid') uuid: string, @CurrentUser() currentUser: AuthUser) {
     return this.commandBus.execute(
-      new DeleteUserCommand({
+      new RestoreUserCommand({
         uuid,
         currentUserUuid: currentUser.uuid,
         currentUserEmail: currentUser.email,
@@ -91,12 +118,12 @@ export class UserController {
     );
   }
 
-  @Post(':uuid/restore')
+  @Delete(':uuid')
   @UseGuards(SelfOrAdminGuard)
-  @Permissions(Permission.USERS_RESTORE)
-  restore(@Param('uuid') uuid: string, @CurrentUser() currentUser: AuthUser) {
+  @Permissions(Permission.USERS_DELETE)
+  delete(@Param('uuid') uuid: string, @CurrentUser() currentUser: AuthUser) {
     return this.commandBus.execute(
-      new RestoreUserCommand({
+      new DeleteUserCommand({
         uuid,
         currentUserUuid: currentUser.uuid,
         currentUserEmail: currentUser.email,

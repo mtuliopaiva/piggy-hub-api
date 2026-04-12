@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { QueryBus } from '@nestjs/cqrs';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { Permissions } from '../../auth/decorators/permissions-user.decorator';
-import { PermissionsGuard } from '../../auth/guards/permissions.guard';
-import { Permission } from '../../auth/enums/permission.type';
+import { Permissions } from '../../../auth/decorators/permissions-user.decorator';
+import { PermissionsGuard } from '../../../auth/guards/permissions.guard';
+import { Permission } from '../../../auth/enums/permission.type';
 import { ListEventLogsQuery } from '../domain/queries/list-eventLogs.query';
 import { EventLogsByUuidQuery } from '../domain/queries/eventLogs-by-uuid.query';
+import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 @ApiTags('EventLogs')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, PermissionsGuard)

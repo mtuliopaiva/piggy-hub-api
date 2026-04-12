@@ -149,4 +149,6 @@ model Category {
   transactions Transaction[]
 
   createdAt   DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
 }

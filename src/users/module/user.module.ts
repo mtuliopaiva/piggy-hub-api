@@ -14,14 +14,21 @@ import { RestoreUserHandler } from '../domain/commands/restore-user.handler';
 import { ListUserHandler } from '../domain/queries/list-user.handler';
 import { UserByUuidHandler } from '../domain/queries/user-by-uuid.handler';
 import { AuditModule } from '../../audits/module/audit.module';
+import { UserProfileByUuidHandler } from '../domain/queries/userProfile-by-uuid.handler';
+import { UpdateUserProfileHandler } from '../domain/commands/update-userProfile.handler';
 
 const CommandHandlers = [
   UpdateUserHandler,
+  UpdateUserProfileHandler,
   DeleteUserHandler,
   RestoreUserHandler,
 ];
 
-const QueryHandlers = [ListUserHandler, UserByUuidHandler];
+const QueryHandlers = [
+  ListUserHandler,
+  UserByUuidHandler,
+  UserProfileByUuidHandler,
+];
 
 @Module({
   imports: [CqrsModule, AuditModule],
