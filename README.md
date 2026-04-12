@@ -9,18 +9,11 @@
 ## 📋 Descrição do Projeto
 
 **Piggy Hub API** é uma aplicação backend desenvolvida para gerenciar transações financeiras pessoais. A API permite que os usuários criem contas, façam login, gerenciem seu perfil, categorias de gastos e registrem transações de receita e despesa.
-
-A aplicação implementa um sistema robusto de:
-- **Autenticação e Autorização** com JWT e sistema de roles/permissions
-- **Auditoria** - rastreamento de todas as operações do sistema
-- **Logs de Eventos** - registro de erros e eventos importantes
-- **Soft Delete** - exclusão lógica de dados
-
 ---
 
 ## 🎯 Objetivo do Projeto
 
-Fornecer uma plataforma segura e escalável para:
+Fornecer uma plataforma para:
 1. Gerenciar contas de usuários com perfis personalizados
 2. Categorizar e registrar transações de receita e despesa
 3. Manter histórico completo de todas as operações (auditoria)
@@ -51,11 +44,6 @@ Fornecer uma plataforma segura e escalável para:
 ### Notificações
 - **Nodemailer** ^8.0.5 - Envio de emails
 
-### Qualidade de Código
-- **ESLint** - Linting
-- **Prettier** - Formatação
-- **Jest** - Testes
-
 ---
 
 ## 📚 Endpoints Existentes
@@ -68,13 +56,6 @@ Fornecer uma plataforma segura e escalável para:
 | `POST` | `/auth/login` | Fazer login | ❌ |
 | `POST` | `/auth/forgot-password` | Solicitar reset de senha | ❌ |
 | `POST` | `/auth/reset-password` | Resetar senha com token | ❌ |
-
-**Schemas:**
-- `AuthRegisterDto` - email, password
-- `AuthLoginDto` - email, password
-- `ForgotPasswordDto` - email
-- `ResetPasswordDto` - token, newPassword
-
 ---
 
 ### 👥 **Usuários** (`/api/users`)
@@ -88,14 +69,6 @@ Fornecer uma plataforma segura e escalável para:
 | `PATCH` | `/users/:uuid` | Atualizar usuário | 🔒 JWT | `users.update` |
 | `DELETE` | `/users/:uuid` | Deletar usuário (soft delete) | 🔒 JWT | `users.delete` |
 | `POST` | `/users/:uuid/restore` | Restaurar usuário deletado | 🔒 JWT | `users.restore` |
-
-**Modelos:**
-- `User` - uuid, email, password, type (ADMIN/USER), createdAt, updatedAt, deletedAt
-- `UserProfile` - name, birthDate, avatarUrl
-
-**Query Parameters:**
-- `search` - Buscar por email (endpoint GET /users)
-
 ---
 
 ### 📂 **Categorias** (`/api/categories`)
@@ -103,25 +76,6 @@ Fornecer uma plataforma segura e escalável para:
 | Método | Endpoint | Descrição | Autenticação | Permissão |
 |--------|----------|-----------|--------------|-----------|
 | `GET` | `/categories` | Listar categorias | 🔒 JWT | ✅ |
-
-**Modelos:**
-- `Category` - uuid, name, description
-
-**Query Parameters:**
-- `search` - Buscar por name ou description
-
-**Categorias Padrão (Seed):**
-- Food, Transport, Rent, Health, Entertainment, Education, Salary, Freelance, Investment, Others
-
----
-
-### 📊 **Transações** (Em Desenvolvimento)
-
-> Endpoints de transações ainda não foram implementados na estrutura atual.
-
-**Modelos:**
-- `Transaction` - uuid, title, amount, type (INCOME/EXPENSE), date, userUuid, categoryUuid
-
 ---
 
 ### 📝 **Auditoria** (`/api/audits`)
@@ -130,30 +84,31 @@ Fornecer uma plataforma segura e escalável para:
 |--------|----------|-----------|--------------|-----------|
 | `GET` | `/audits` | Listar auditorias | 🔒 JWT | `audits.read` |
 | `GET` | `/audits/:uuid` | Obter auditoria por ID | 🔒 JWT | `audits.read` |
-
-**Modelos:**
-- `Audit` - uuid, actorUuid, actorEmail, action, entity, entityUuid, oldData, newData, metadata, createdAt
-
 ---
 
-### 📋 **Logs de Eventos** (`/api/event-logs`)
+### 📋 **Logs de Eventos** (`/api/eventLogs`)
 
-> Endpoints para logs de eventos disponíveis para consulta.
-
-**Modelos:**
-- `EventLog` - uuid, level, message, context, stack, metadata, createdAt
-
+| Método | Endpoint | Descrição | Autenticação | Permissão |
+|--------|----------|-----------|--------------|-----------|
+| `GET` | `/eventLogs` | Listar logs de eventos | 🔒 JWT | `logs.read` |
+| `GET` | `/eventLogs/:uuid` | Obter log por ID | 🔒 JWT | `logs.read` |
 ---
 
 ## 🚀 Como Rodar o Projeto
 
 ### Pré-requisitos
 
-- **Node.js** ^22.0
-- **npm** ou **yarn**
-- **PostgreSQL** 12+
+- Node.js ^22.0
+- PostgreSQL 12+
+- npm ou yarn
 
-### 1️⃣ Instalação de Dependências
+### 1. Instalar Dependências
 
 ```bash
 npm install
+
+### 2. Configurar Variáveis de Ambiente
+### 3. Criar Banco de Dados
+### 4. Executar Migrações
+### 5. Popular com as Seeds
+
