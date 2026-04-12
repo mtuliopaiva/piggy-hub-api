@@ -103,10 +103,6 @@ Fornecer uma plataforma para:
 - npm ou yarn
 
 ### 1. Instalar Dependências
-
-```bash
-npm install
-
 ### 2. Configurar Variáveis de Ambiente
 ### 3. Criar Banco de Dados
 ### 4. Executar Migrações
