@@ -105,6 +105,21 @@ async function main() {
     },
   });
 
+  await prisma.category.createMany({
+    data: [
+      { name: 'Food' },
+      { name: 'Transport' },
+      { name: 'Rent' },
+      { name: 'Health' },
+      { name: 'Entertainment' },
+      { name: 'Education' },
+      { name: 'Salary' },
+      { name: 'Freelance' },
+      { name: 'Investment' },
+      { name: 'Others' },
+    ],
+  });
+
   console.log('✅ Seed concluída');
   console.log('👤 User:', user.email);
   console.log('👑 Admin:', admin.email);

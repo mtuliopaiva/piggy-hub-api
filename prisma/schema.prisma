@@ -12,6 +12,11 @@ enum UserType {
   USER
 }
 
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
 model User {
   uuid      String   @id @default(uuid())
   email     String   @unique
@@ -22,8 +27,25 @@ model User {
   deletedAt DateTime?
 
   userRoles UserRole[]
+  userProfile UserProfile?
+
+  transactions Transaction[]
 
   @@index([deletedAt])
+}
+
+model UserProfile {
+  uuid        String   @id @default(uuid())
+
+  userUuid    String   @unique
+  user        User     @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
+
+  name        String?
+  birthDate   DateTime?
+  avatarUrl   String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Role {
@@ -87,7 +109,7 @@ model Audit {
   @@index([createdAt])
 }
 
-model Log {
+model EventLog {
   uuid         String   @id @default(uuid())
   level        String
   message      String
@@ -98,4 +120,33 @@ model Log {
 
   @@index([level])
   @@index([createdAt])
+}
+
+model Transaction {
+  uuid        String   @id @default(uuid())
+  title       String
+  amount      Decimal  @db.Decimal(10,2)
+  type        TransactionType
+  date        DateTime
+
+  userUuid    String
+  user        User     @relation(fields: [userUuid], references: [uuid])
+
+  categoryUuid String
+  category     Category @relation(fields: [categoryUuid], references: [uuid])
+
+  createdAt   DateTime @default(now())
+
+  @@index([userUuid])
+  @@index([categoryUuid])
+}
+
+model Category {
+  uuid        String   @id @default(uuid())
+  name        String
+  description String?
+
+  transactions Transaction[]
+
+  createdAt   DateTime @default(now())
 }

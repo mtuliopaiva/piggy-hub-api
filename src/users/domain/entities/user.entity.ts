@@ -5,6 +5,10 @@ export class UserEntity {
   email: string;
   password: string;
   type: UserType;
+  userProfile?: {
+    name?: string;
+    avatarUrl?: string;
+  };
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
