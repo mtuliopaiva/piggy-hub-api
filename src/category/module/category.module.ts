@@ -9,10 +9,22 @@ import { CategoryController } from '../controller/category.controller';
 import { CategoryService } from '../service/category.service';
 import { ListCategoryHandler } from '../domain/queries/list-category.handler';
 import { CreateCategoryHandler } from '../domain/commands/create-category.handler';
+import { UpdateCategoryHandler } from '../domain/commands/update-category.handler';
+import { CategoryByUuidQuery } from '../domain/queries/category-by-uuid.query';
+import { CategoryByUuidHandler } from '../domain/queries/category-by-uuid.handler';
+import { DeleteCategoryHandler } from '../domain/commands/delete-category.handler';
+import { RestoreCategoryHandler } from '../domain/commands/restore-category.handler';
 
-const CommandHandlers = [ListCategoryHandler, CreateCategoryHandler];
+const CommandHandlers = [
+  ListCategoryHandler,
+  CreateCategoryHandler,
+  UpdateCategoryHandler,
+  CategoryByUuidHandler,
+  DeleteCategoryHandler,
+  RestoreCategoryHandler,
+];
 
-const QueryHandlers = [ListCategoryQuery];
+const QueryHandlers = [ListCategoryQuery, CategoryByUuidQuery];
 
 @Module({
   imports: [CqrsModule, AuditModule],
