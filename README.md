@@ -1,98 +1,110 @@
+# Piggy Hub API
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  API REST para gerenciamento de finanças pessoais com suporte a categorias de gastos, perfil de usuário e auditoria de operações.
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📋 Descrição do Projeto
 
-## Description
+**Piggy Hub API** é uma aplicação backend desenvolvida para gerenciar transações financeiras pessoais. A API permite que os usuários criem contas, façam login, gerenciem seu perfil, categorias de gastos e registrem transações de receita e despesa.
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🎯 Objetivo do Projeto
 
-## Project setup
+Fornecer uma plataforma para:
+1. Gerenciar contas de usuários com perfis personalizados
+2. Categorizar e registrar transações de receita e despesa
+3. Manter histórico completo de todas as operações (auditoria)
+4. Controlar permissões baseadas em roles (Admin/User)
+5. Registrar eventos e erros do sistema
 
-```bash
-$ npm install
-```
+---
 
-## Compile and run the project
+## 🛠️ Tecnologias Utilizadas
 
-```bash
-# development
-$ npm run start
+### Backend
+- **NestJS** ^11.0.1 - Framework Node.js
+- **TypeScript** - Linguagem de programação
+- **PostgreSQL** - Banco de dados
+- **Prisma** 6.5.0 - ORM
 
-# watch mode
-$ npm run start:dev
+### Autenticação & Segurança
+- **JWT** (@nestjs/jwt ^11.0.2)
+- **Passport** ^0.7.0 with JWT Strategy
+- **bcrypt** ^6.0.0 - Hash de senhas
 
-# production mode
-$ npm run start:prod
-```
+### Padrões & Arquitetura
+- **CQRS Pattern** (@nestjs/cqrs ^11.0.3)
+- **Swagger** (@nestjs/swagger ^11.2.5) - Documentação API
+- **Class Validator** ^0.14.3 - Validação de DTOs
+- **Class Transformer** ^0.5.1 - Transformação de dados
 
-## Run tests
+### Notificações
+- **Nodemailer** ^8.0.5 - Envio de emails
 
-```bash
-# unit tests
-$ npm run test
+---
 
-# e2e tests
-$ npm run test:e2e
+## 📚 Endpoints Existentes
 
-# test coverage
-$ npm run test:cov
-```
+### 🔐 **Autenticação** (`/api/auth`)
 
-## Deployment
+| Método | Endpoint | Descrição | Autenticação |
+|--------|----------|-----------|--------------|
+| `POST` | `/auth/register` | Registrar novo usuário | ❌ |
+| `POST` | `/auth/login` | Fazer login | ❌ |
+| `POST` | `/auth/forgot-password` | Solicitar reset de senha | ❌ |
+| `POST` | `/auth/reset-password` | Resetar senha com token | ❌ |
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### 👥 **Usuários** (`/api/users`)
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+| Método | Endpoint | Descrição | Autenticação | Permissão |
+|--------|----------|-----------|--------------|-----------|
+| `GET` | `/users` | Listar usuários | 🔒 JWT | `users.read` |
+| `GET` | `/users/me` | Obter perfil do usuário logado | 🔒 JWT | `users.read` |
+| `GET` | `/users/:uuid` | Obter usuário por ID | 🔒 JWT | `users.read` |
+| `PATCH` | `/users/me/update` | Atualizar perfil do usuário | 🔒 JWT | `users.update` |
+| `PATCH` | `/users/:uuid` | Atualizar usuário | 🔒 JWT | `users.update` |
+| `DELETE` | `/users/:uuid` | Deletar usuário (soft delete) | 🔒 JWT | `users.delete` |
+| `POST` | `/users/:uuid/restore` | Restaurar usuário deletado | 🔒 JWT | `users.restore` |
+---
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+### 📂 **Categorias** (`/api/categories`)
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+| Método | Endpoint | Descrição | Autenticação | Permissão |
+|--------|----------|-----------|--------------|-----------|
+| `GET` | `/categories` | Listar categorias | 🔒 JWT | ✅ |
+---
 
-## Resources
+### 📝 **Auditoria** (`/api/audits`)
 
-Check out a few resources that may come in handy when working with NestJS:
+| Método | Endpoint | Descrição | Autenticação | Permissão |
+|--------|----------|-----------|--------------|-----------|
+| `GET` | `/audits` | Listar auditorias | 🔒 JWT | `audits.read` |
+| `GET` | `/audits/:uuid` | Obter auditoria por ID | 🔒 JWT | `audits.read` |
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 📋 **Logs de Eventos** (`/api/eventLogs`)
 
-## Support
+| Método | Endpoint | Descrição | Autenticação | Permissão |
+|--------|----------|-----------|--------------|-----------|
+| `GET` | `/eventLogs` | Listar logs de eventos | 🔒 JWT | `logs.read` |
+| `GET` | `/eventLogs/:uuid` | Obter log por ID | 🔒 JWT | `logs.read` |
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 🚀 Como Rodar o Projeto
 
-## Stay in touch
+### Pré-requisitos
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Node.js ^22.0
+- PostgreSQL 12+
+- npm ou yarn
 
-## License
+### 1. Instalar Dependências
+### 2. Configurar Variáveis de Ambiente
+### 3. Criar Banco de Dados
+### 4. Executar Migrações
+### 5. Popular com as Seeds
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
