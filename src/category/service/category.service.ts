@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CategoryRepository } from '../repositories/category.repository';
+import { CreateCategoryDto } from '../domain/dtos/create-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -16,5 +17,9 @@ export class CategoryService {
     ]);
 
     return { data, total };
+  }
+
+  async createCategory(data: CreateCategoryDto) {
+    return this.categoryRepository.create(data);
   }
 }

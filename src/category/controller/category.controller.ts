@@ -19,6 +19,8 @@ import { SelfOrAdminGuard } from '../../auth/guards/self-or-admin.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../../auth/types/auth-user.type';
 import { ListCategoryQuery } from '../domain/queries/list-category.query';
+import { CreateCategoryCommand } from '../domain/commands/create-category.command';
+import { CreateCategoryDto } from '../domain/dtos/create-category.dto';
 @ApiTags('Category')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -36,6 +38,14 @@ export class CategoryController {
       new ListCategoryQuery({
         search,
       }),
+    );
+  }
+
+  @Post()
+  @Permissions(Permission.CATEGORY_CREATE)
+  create(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.commandBus.execute(
+      new CreateCategoryCommand(createCategoryDto),
     );
   }
 }

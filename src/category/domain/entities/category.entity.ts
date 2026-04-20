@@ -1,9 +1,7 @@
-import { UserType } from '@prisma/client';
-
 export class CategoryEntity {
   uuid: string;
   name: string;
-  description?: string;
+  description?: string | null;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;

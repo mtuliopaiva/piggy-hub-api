@@ -1,19 +1,13 @@
 import { PrismaClient, UserType } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { Permission } from '../src/auth/enums/permission.type';
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Seeding...');
 
-  const permissionsList = [
-    'users.read',
-    'users.update',
-    'users.delete',
-    'users.restore',
-    'logs.read',
-    'audits.read',
-  ];
+  const permissionsList = Object.values(Permission);
 
   const permissions = await Promise.all(
     permissionsList.map((name) =>

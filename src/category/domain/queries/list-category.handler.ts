@@ -18,7 +18,7 @@ export class ListCategoryHandler implements IQueryHandler<ListCategoryQuery> {
         (category): ReadCategoryDto => ({
           uuid: category.uuid,
           name: category.name,
-          description: category.description,
+          description: category.description ?? undefined,
           createdAt: category.createdAt,
           updatedAt: category.updatedAt,
           deletedAt: category.deletedAt,

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../core/database/prisma.service';
 import { CategoryRepository } from './category.repository';
 import { CategoryEntity } from '../domain/entities/category.entity';
+import { CreateCategoryData } from '../domain/types/create-category-data.type';
 
 @Injectable()
 export class PrismaCategoryRepository implements CategoryRepository {
@@ -50,6 +51,15 @@ export class PrismaCategoryRepository implements CategoryRepository {
               },
             }
           : {}),
+      },
+    });
+  }
+
+  async create(data: CreateCategoryData): Promise<CategoryEntity> {
+    return this.prisma.category.create({
+      data: {
+        name: data.name,
+        description: data.description,
       },
     });
   }

@@ -8,8 +8,9 @@ import { ListCategoryQuery } from '../domain/queries/list-category.query';
 import { CategoryController } from '../controller/category.controller';
 import { CategoryService } from '../service/category.service';
 import { ListCategoryHandler } from '../domain/queries/list-category.handler';
+import { CreateCategoryHandler } from '../domain/commands/create-category.handler';
 
-const CommandHandlers = [ListCategoryHandler];
+const CommandHandlers = [ListCategoryHandler, CreateCategoryHandler];
 
 const QueryHandlers = [ListCategoryQuery];
 
