@@ -6,6 +6,7 @@ import { UserModule } from './users/module/user.module';
 import { AuditModule } from './audits/module/audit.module';
 import { EventLogsModule } from './core/eventLogs/module/eventLogs.module';
 import { CategoryModule } from './category/module/category.module';
+import { TransactionModule } from './transaction/module/transaction.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CategoryModule } from './category/module/category.module';
     EventLogsModule,
     AuditModule,
     CategoryModule,
+    TransactionModule,
   ],
   controllers: [],
   providers: [],

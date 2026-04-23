@@ -40,10 +40,31 @@ async function main() {
               connect: { uuid: permissionsMap['users.update'].uuid },
             },
           },
+
+          // 🔥 NOVAS PERMISSIONS
+          {
+            permission: {
+              connect: { uuid: permissionsMap['transaction.read'].uuid },
+            },
+          },
+          {
+            permission: {
+              connect: { uuid: permissionsMap['transaction.create'].uuid },
+            },
+          },
+          {
+            permission: {
+              connect: { uuid: permissionsMap['transaction.update'].uuid },
+            },
+          },
+          {
+            permission: {
+              connect: { uuid: permissionsMap['transaction.delete'].uuid },
+            },
+          },
         ],
       },
     },
-    include: { rolePermissions: true },
   });
 
   const adminRole = await prisma.role.upsert({

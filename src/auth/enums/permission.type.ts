@@ -10,4 +10,9 @@ export enum Permission {
   CATEGORY_UPDATE = 'category.update',
   CATEGORY_DELETE = 'category.delete',
   CATEGORY_RESTORE = 'category.restore',
+  TRANSACTION_READ = 'transaction.read',
+  TRANSACTION_CREATE = 'transaction.create',
+  TRANSACTION_UPDATE = 'transaction.update',
+  TRANSACTION_DELETE = 'transaction.delete',
+  TRANSACTION_RESTORE = 'transaction.restore',
 }
