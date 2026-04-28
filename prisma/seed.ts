@@ -54,11 +54,6 @@ async function main() {
           },
           {
             permission: {
-              connect: { uuid: permissionsMap['transaction.update'].uuid },
-            },
-          },
-          {
-            permission: {
               connect: { uuid: permissionsMap['transaction.delete'].uuid },
             },
           },

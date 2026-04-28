@@ -22,6 +22,11 @@ import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../../auth/types/auth-user.type';
 import { TransactionByUuidQuery } from '../domain/queries/transaction-by-uuid.query';
 import { ListTransactionQuery } from '../domain/queries/list-transaction.query';
+import { UpdateTransactionDto } from '../domain/dtos/update-transaction.dto';
+import { UpdateTransactionCommand } from '../domain/commands/update-transaction.command';
+import { DeleteTransactionCommand } from '../domain/commands/delete-transaction.command';
+import { RestoreTransactionCommand } from '../domain/commands/restore-transaction.command';
+import { TransactionByCurrentUserQuery } from '../domain/queries/transaction-by-currentUser.query';
 @ApiTags('Transaction')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -42,6 +47,16 @@ export class TransactionController {
     );
   }
 
+  @Get('me')
+  @Permissions(Permission.TRANSACTION_READ)
+  listByCurrentUser(@CurrentUser() currentUser: AuthUser) {
+    return this.queryBus.execute(
+      new TransactionByCurrentUserQuery({
+        userUuid: currentUser.uuid,
+      }),
+    );
+  }
+
   @Get('category/:categoryUuid')
   findByCategoryUuid(
     @Param('categoryUuid', new ParseUUIDPipe()) categoryUuid: string,
@@ -58,5 +73,34 @@ export class TransactionController {
   @Permissions(Permission.TRANSACTION_CREATE)
   create(@Body() dto: CreateTransactionDto, @CurrentUser() user: AuthUser) {
     return this.commandBus.execute(new CreateTransactionCommand(dto, user));
+  }
+
+  @Patch(':uuid')
+  @Permissions(Permission.TRANSACTION_UPDATE)
+  update(
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
+    @Body() updateTransactionDto: UpdateTransactionDto,
+  ) {
+    return this.commandBus.execute(
+      new UpdateTransactionCommand(uuid, updateTransactionDto),
+    );
+  }
+
+  @Delete(':uuid')
+  @Permissions(Permission.CATEGORY_DELETE)
+  delete(
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.commandBus.execute(new DeleteTransactionCommand(uuid, user));
+  }
+
+  @Post(':uuid/restore')
+  @Permissions(Permission.CATEGORY_RESTORE)
+  restore(
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.commandBus.execute(new RestoreTransactionCommand(uuid, user));
   }
 }

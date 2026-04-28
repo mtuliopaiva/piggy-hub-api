@@ -11,11 +11,24 @@ import { TransactionService } from '../service/transaction.service';
 import { PrismaCategoryRepository } from '../../category/repositories/prisma-category.repository';
 import { CategoryRepository } from '../../category/repositories/category.repository';
 import { TransactionByUuidHandler } from '../domain/queries/transaction-by-uuid.handler';
-import { ListTransactionHandler } from '../domain/queries/list-category.handler';
+import { ListTransactionHandler } from '../domain/queries/list-transaction.handler';
+import { UpdateTransactionHandler } from '../domain/commands/update-transaction.handler';
+import { RestoreTransactionHandler } from '../domain/commands/restore-transaction.handler';
+import { DeleteTransactionHandler } from '../domain/commands/delete-transaction.handler';
+import { TransactionByCurrentUserHandler } from '../domain/queries/transaction-by-currentUser.handler';
 
-const CommandHandlers = [CreateTransactionHandler];
+const CommandHandlers = [
+  CreateTransactionHandler,
+  UpdateTransactionHandler,
+  DeleteTransactionHandler,
+  RestoreTransactionHandler,
+];
 
-const QueryHandlers = [TransactionByUuidHandler, ListTransactionHandler];
+const QueryHandlers = [
+  TransactionByUuidHandler,
+  ListTransactionHandler,
+  TransactionByCurrentUserHandler,
+];
 
 @Module({
   imports: [CqrsModule, AuditModule],
