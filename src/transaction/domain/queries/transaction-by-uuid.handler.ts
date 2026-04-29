@@ -8,7 +8,7 @@ export class TransactionByUuidHandler implements IQueryHandler<TransactionByUuid
   constructor(private readonly service: TransactionService) {}
 
   async execute(query: TransactionByUuidQuery): Promise<ReadTransactionDto> {
-    const transaction = await this.service.findByUuid(query.uuid);
+    const transaction = await this.service.findByUuid(query.uuid, query.user);
 
     return {
       uuid: transaction.uuid,

@@ -3,7 +3,7 @@ import { PrismaService } from '../../core/database/prisma.service';
 import { TransactionRepository } from './transaction.repository';
 import { TransactionEntity } from '../domain/entities/transaction.entity';
 import { CreateTransactionData } from '../domain/types/create-transaction-data.type';
-import { UpdateTransactionDto } from '../domain/dtos/update-transaction.dto';
+import { UpdateTransactionData } from '../domain/types/update-transaction-data.type';
 
 @Injectable()
 export class PrismaTransactionRepository implements TransactionRepository {
@@ -111,7 +111,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
 
   async updateTransaction(
     uuid: string,
-    dto: UpdateTransactionDto,
+    dto: UpdateTransactionData,
   ): Promise<TransactionEntity> {
     return this.prisma.transaction.update({
       where: { uuid },

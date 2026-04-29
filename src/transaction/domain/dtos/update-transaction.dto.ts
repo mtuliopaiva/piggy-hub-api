@@ -26,7 +26,7 @@ export class UpdateTransactionDto {
   @ApiProperty()
   @IsDateString()
   @IsOptional()
-  date: string;
+  date?: string;
 
   @ApiPropertyOptional()
   @IsUUID()

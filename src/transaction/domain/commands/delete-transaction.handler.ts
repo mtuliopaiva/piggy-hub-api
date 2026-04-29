@@ -10,7 +10,7 @@ export class DeleteTransactionHandler implements ICommandHandler<DeleteTransacti
   async execute(
     command: DeleteTransactionCommand,
   ): Promise<ActionTransactionDto> {
-    await this.service.softDelete(command.uuid, command.actor);
+    await this.service.softDelete(command.uuid, command.user);
 
     return { success: true };
   }

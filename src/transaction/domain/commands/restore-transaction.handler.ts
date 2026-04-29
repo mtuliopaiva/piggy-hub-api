@@ -10,7 +10,7 @@ export class RestoreTransactionHandler implements ICommandHandler<RestoreTransac
   async execute(
     command: RestoreTransactionCommand,
   ): Promise<ActionTransactionDto> {
-    await this.service.restore(command.uuid, command.actor);
+    await this.service.restore(command.uuid, command.user);
 
     return { success: true };
   }

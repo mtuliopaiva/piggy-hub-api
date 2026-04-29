@@ -1,6 +1,7 @@
 import { UpdateTransactionDto } from '../domain/dtos/update-transaction.dto';
 import { TransactionEntity } from '../domain/entities/transaction.entity';
 import { CreateTransactionData } from '../domain/types/create-transaction-data.type';
+import { UpdateTransactionData } from '../domain/types/update-transaction-data.type';
 
 export abstract class TransactionRepository {
   abstract create(data: CreateTransactionData): Promise<TransactionEntity>;
@@ -17,7 +18,7 @@ export abstract class TransactionRepository {
   ): Promise<number>;
   abstract updateTransaction(
     uuid: string,
-    dto: UpdateTransactionDto,
+    dto: UpdateTransactionData,
   ): Promise<TransactionEntity>;
   abstract softDelete(uuid: string): Promise<TransactionEntity>;
   abstract restore(uuid: string): Promise<TransactionEntity>;

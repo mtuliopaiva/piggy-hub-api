@@ -26,7 +26,6 @@ import { UpdateTransactionDto } from '../domain/dtos/update-transaction.dto';
 import { UpdateTransactionCommand } from '../domain/commands/update-transaction.command';
 import { DeleteTransactionCommand } from '../domain/commands/delete-transaction.command';
 import { RestoreTransactionCommand } from '../domain/commands/restore-transaction.command';
-import { TransactionByCurrentUserQuery } from '../domain/queries/transaction-by-currentUser.query';
 @ApiTags('Transaction')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -38,21 +37,19 @@ export class TransactionController {
   ) {}
 
   @Get()
+  @Permissions(Permission.TRANSACTION_READ)
   @ApiQuery({ name: 'search', required: false })
-  list(@Query('search') search?: string) {
+  @ApiQuery({ name: 'categoryUuid', required: false })
+  list(
+    @CurrentUser() user: AuthUser,
+    @Query('search') search?: string,
+    @Query('categoryUuid') categoryUuid?: string,
+  ) {
     return this.queryBus.execute(
       new ListTransactionQuery({
         search,
-      }),
-    );
-  }
-
-  @Get('me')
-  @Permissions(Permission.TRANSACTION_READ)
-  listByCurrentUser(@CurrentUser() currentUser: AuthUser) {
-    return this.queryBus.execute(
-      new TransactionByCurrentUserQuery({
-        userUuid: currentUser.uuid,
+        categoryUuid,
+        user,
       }),
     );
   }
@@ -60,13 +57,19 @@ export class TransactionController {
   @Get('category/:categoryUuid')
   findByCategoryUuid(
     @Param('categoryUuid', new ParseUUIDPipe()) categoryUuid: string,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.queryBus.execute(new ListTransactionQuery({ categoryUuid }));
+    return this.queryBus.execute(
+      new ListTransactionQuery({ categoryUuid, user }),
+    );
   }
 
   @Get(':uuid')
-  findByUuid(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
-    return this.queryBus.execute(new TransactionByUuidQuery(uuid));
+  findByUuid(
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.queryBus.execute(new TransactionByUuidQuery(uuid, user));
   }
 
   @Post()
@@ -80,14 +83,15 @@ export class TransactionController {
   update(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Body() updateTransactionDto: UpdateTransactionDto,
+    @CurrentUser() user: AuthUser,
   ) {
     return this.commandBus.execute(
-      new UpdateTransactionCommand(uuid, updateTransactionDto),
+      new UpdateTransactionCommand(uuid, updateTransactionDto, user),
     );
   }
 
   @Delete(':uuid')
-  @Permissions(Permission.CATEGORY_DELETE)
+  @Permissions(Permission.TRANSACTION_DELETE)
   delete(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @CurrentUser() user: AuthUser,
@@ -96,7 +100,7 @@ export class TransactionController {
   }
 
   @Post(':uuid/restore')
-  @Permissions(Permission.CATEGORY_RESTORE)
+  @Permissions(Permission.TRANSACTION_RESTORE)
   restore(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @CurrentUser() user: AuthUser,

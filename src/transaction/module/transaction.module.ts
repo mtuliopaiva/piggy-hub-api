@@ -15,7 +15,6 @@ import { ListTransactionHandler } from '../domain/queries/list-transaction.handl
 import { UpdateTransactionHandler } from '../domain/commands/update-transaction.handler';
 import { RestoreTransactionHandler } from '../domain/commands/restore-transaction.handler';
 import { DeleteTransactionHandler } from '../domain/commands/delete-transaction.handler';
-import { TransactionByCurrentUserHandler } from '../domain/queries/transaction-by-currentUser.handler';
 
 const CommandHandlers = [
   CreateTransactionHandler,
@@ -24,11 +23,7 @@ const CommandHandlers = [
   RestoreTransactionHandler,
 ];
 
-const QueryHandlers = [
-  TransactionByUuidHandler,
-  ListTransactionHandler,
-  TransactionByCurrentUserHandler,
-];
+const QueryHandlers = [TransactionByUuidHandler, ListTransactionHandler];
 
 @Module({
   imports: [CqrsModule, AuditModule],

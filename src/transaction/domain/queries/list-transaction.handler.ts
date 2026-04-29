@@ -11,7 +11,7 @@ export class ListTransactionHandler implements IQueryHandler<ListTransactionQuer
     data: ReadTransactionDto[];
     meta: { total: number };
   }> {
-    const { data, total } = await this.service.list(query.data);
+    const { data, total } = await this.service.list(query.params);
 
     return {
       data: data.map(

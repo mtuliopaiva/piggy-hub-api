@@ -13,6 +13,7 @@ export class UpdateTransactionHandler implements ICommandHandler<UpdateTransacti
     const updatedTransaction = await this.service.updateTransaction(
       command.uuid,
       command.dto,
+      command.user,
     );
 
     return {
